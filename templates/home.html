@@ -1,0 +1,121 @@
+<div class="container">
+    <div class="text-center">
+        <legend>Hi {{ userData.first_name }}</legend>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover border">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Page ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>ANALYZE</th>
+                            <th>ADVERTISE</th>
+                            <th>MODERATE</th>
+                            <th>CREATE CONTENT</th>
+                            <th>MANAGE</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="x in accounts track by $index" ng-init="showAccountDetails[x.id] = false">
+                        <tr ng-click="accountDetails(x); showAccountDetails[x.id] = !showAccountDetails[x.id]">
+                            <td>{{ $index + 1}}</td>
+                            <td>{{ x.id }}</td>
+                            <td>{{ x.name }}</td>
+                            <td>{{ x.category }}</td>
+                            <td>
+                                <span ng-if="x.tasks.indexOf('ANALYZE') > -1"><i class="fas fa-check fa-sm"></i></span>
+                            </td>
+                            <td>
+                                <span ng-if="x.tasks.indexOf('ADVERTISE') > -1"><i class="fas fa-check fa-sm"></i></span>
+                            </td>
+                            <td>
+                                <span ng-if="x.tasks.indexOf('MODERATE') > -1"><i class="fas fa-check fa-sm"></i></span>
+                            </td>
+                            <td>
+                                <span ng-if="x.tasks.indexOf('CREATE_CONTENT') > -1"><i class="fas fa-check fa-sm"></i></span>
+                            </td>
+                            <td>
+                                <span ng-if="x.tasks.indexOf('MANAGE') > -1"><i class="fas fa-check fa-sm"></i></span>
+                            </td>
+                            <td>
+                                <i class="fas fa-angle-down" ng-hide="showAccountDetails[x.id]"></i>
+                                <i class="fas fa-angle-up" ng-show="showAccountDetails[x.id]"></i>
+                            </td>
+                        </tr>
+                        <tr ng-show="showAccountDetails[x.id]" ng-if="data[x.id].ig">
+                            <td colspan="10">
+                                <div class="container" ng-if="data[x.id]">
+                                    <div ng-if="data[x.id].ig">
+                                        <b>Instagram business account insight</b> Number of media : {{ data[x.id].ig.media.length
+                                        }}
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Media ID</th>
+                                                    <th>Media Type</th>
+                                                    <th>No. of likes</th>
+                                                    <th>No. of Comments</th>
+                                                    <th>Created on</th>
+                                                    <th>Image</th>
+                                                    <th>Insight</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-repeat="(key, value) in data[x.id].ig.media">
+                                                <tr>
+                                                    <td>{{ key + 1 }}</td>
+                                                    <td>{{ value.details.id }}</td>
+                                                    <td>{{ value.details.media_type }}</td>
+                                                    <td>{{ value.details.like_count }}</td>
+                                                    <td>{{ value.details.comments_count }}</td>
+                                                    <td>{{ value.details.timestamp }}</td>
+                                                    <td><img ng-src="{{ value.details.media_url }}" class="img-thumbnail" alt="value.details.media_url"></td>
+                                                    <td>
+                                                        <table class="table table-condensed">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Period</th>
+                                                                    <th>Values</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody ng-if="value.insight.data" ng-repeat="insight in value.insight.data">
+                                                                <tr>
+                                                                    <td>{{ insight.name }}</td>
+                                                                    <td>{{ insight.period }}</td>
+                                                                    <td>{{ insight.values[0].value }}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tr ng-if="value.insight.error" class="table-danger">
+                                                                <td>{{ key + 1 }}</td>
+                                                                <td>{{ value.details.id }}</td>
+                                                                <td colspan="2">{{ value.insight.error.error_user_msg }}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div ng-if="!data[x.id]">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="table-info" ng-if="!data[x.id].ig && showAccountDetails[x.id]">
+                            <td colspan="10">User doesn't have Instagram Business account, kindly convert user's instagram account
+                                to business account</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
